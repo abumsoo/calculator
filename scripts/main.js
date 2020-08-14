@@ -24,35 +24,60 @@ function operate(op, x, y) {
   else return "Not a valid operation";
 }
 
-function showInput(e) {
-  const display = document.querySelector('.display');
+function logInput(e) {
+  const display = document.querySelector('.display > .in');
   const text = document.createTextNode(e.target.textContent);
   display.appendChild(text);
 }
 
-function main() {
-  let x;
-  let y;
-  let op;
-  const numButtons = document.querySelectorAll('.num');
-  numButtons.forEach(button => button.addEventListener('click', showInput));
-  const opButtons = document.querySelectorAll('.op');
-  opButtons.forEach(button => button.addEventListener('click', (e) => {
-    x = document.querySelector('.display').textContent;
-    x = x.replace(/\s/g, '');
-    op = e.target.textContent;
-    e.target.textContent = ` ${e.target.textContent} `;
-    showInput(e);
-  }));
+function logOutput(e) {
+  const display = document.querySelector('.display > .out');
+  const text = document.createTextNode(e.target.textContent);
+  display.appendChild(text);
+}
+
+function clear() {
+  const clearBtn = document.querySelector('.clear');
+  clearBtn.addEventListener('click', () => {
+    document.querySelector('.display > .in').innerHTML = '';
+    document.querySelector('.display > .out').innerHTML = '';
+  });
+}
+
+function startListeners() {
   const eqButton = document.querySelector('.eq');
   eqButton.addEventListener('click', (e) => {
     const display = document.querySelector('.display');
     y = display.textContent.replace(/\s/g, '');
     y = y.replace(/^.+[\/x\-\+]/g, '');
     let ans = operate(op, x, y);
-    e.target.textContent = ` = ${ans}`;
-    showInput(e);
+    display.textContent = `${x} ${op} ${y} = ${ans}`;
   });
+  getNums();
+  getOps();
+  clear();
+}
+
+function getOps() {
+  const opButtons = document.querySelectorAll('.op');
+  opButtons.forEach(button => button.addEventListener('click', (e) => {
+    x = document.querySelector('.display').textContent;
+    x = x.replace(/\s/g, '');
+    op = e.target.textContent;
+    logInput(e);
+  }));
+}
+
+function getNums() {
+  const numButtons = document.querySelectorAll('.num');
+  numButtons.forEach(button => button.addEventListener('click', logInput));
+}
+
+function main() {
+  let x;
+  let y;
+  let op;
+  startListeners();
 }
 
 main();
