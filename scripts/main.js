@@ -15,12 +15,13 @@ function divide(x, y) {
 }
 
 function operate(op, x, y) {
+  op = op.replace(/\s/g, '');
   x = Number(x)
   y = Number(y)
   if (op == '+') return add(x, y);
   else if (op == '-') return subtract(x, y);
   else if (op == 'x') return multiply(x, y);
-  else if (op == '/') return divide(x, y);
+  else if (op == '÷') return divide(x, y);
   else return "Not a valid operation";
 }
 
@@ -30,9 +31,9 @@ function logInput(e) {
   display.appendChild(text);
 }
 
-function logOutput(e) {
+function logOutput(ans) {
   const display = document.querySelector('.display > .out');
-  const text = document.createTextNode(e.target.textContent);
+  const text = document.createTextNode(`= ${ans}`);
   display.appendChild(text);
 }
 
@@ -51,7 +52,7 @@ function startListeners() {
     y = display.textContent.replace(/\s/g, '');
     y = y.replace(/^.+[\/x\-\+]/g, '');
     let ans = operate(op, x, y);
-    display.textContent = `${x} ${op} ${y} = ${ans}`;
+    logOutput(ans);
   });
   getNums();
   getOps();
